@@ -562,7 +562,7 @@ def infer(
     
     print(f"length of data : {len(predictions)}")
     # Replace true label extraction with synthetic labels
-    true_labels = [1] * len(predictions)  # All samples considered fake
+    true_labels = [0] * len(predictions)  # All samples considered fake
 
     # Keep existing prediction processing
     pred_scores = [score for score, _ in predictions.values()]
