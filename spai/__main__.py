@@ -577,7 +577,7 @@ def infer(
     print(f"precision : {precision:.4f}")
     print(f"recall : {recall:.4f}")
     print(f"f1_score : {f1:.4f}")
-    print(predictions)
+    # print(predictions)
 
 
 @cli.command()
