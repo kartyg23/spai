@@ -562,7 +562,8 @@ def infer(
     
     print(f"length of data : {len(predictions)}")
     # Replace true label extraction with synthetic labels
-    true_labels = [0] * len(predictions)  # All samples considered fake
+    half_length = len(predictions) // 2
+    true_labels = [0] * half_length + [1] * (len(predictions) - half_length)
 
     # Keep existing prediction processing
     pred_scores = [score for score, _ in predictions.values()]
@@ -570,13 +571,24 @@ def infer(
 
     # Calculate metrics against synthetic ground truth
     accuracy = accuracy_score(true_labels, pred_labels)
-    precision = precision_score(true_labels, pred_labels)
-    recall = recall_score(true_labels, pred_labels) 
+    # For class 0
+    precision_0 = precision_score(true_labels, pred_labels, pos_label=0)
+    recall_0 = recall_score(true_labels, pred_labels, pos_label=0)
+    f1_0 = f1_score(true_labels, pred_labels, pos_label=0)
+
+    # For class 1
+    precision_1 = precision_score(true_labels, pred_labels, pos_label=1)
+    recall_1 = recall_score(true_labels, pred_labels, pos_label=1)
+    f1_1 = f1_score(true_labels, pred_labels, pos_label=1)
     f1 = f1_score(true_labels, pred_labels)
     print(f"accuracy : {accuracy:.4f}")
-    print(f"precision : {precision:.4f}")
-    print(f"recall : {recall:.4f}")
-    print(f"f1_score : {f1:.4f}")
+    print(f"precision (real): {precision_0:.4f}")
+    print(f"recall (real): {recall_0:.4f}")
+    print(f"f1_score (real): {f1_0:.4f}")
+    print(f"precision (fake): {precision_1:.4f}")
+    print(f"recall (fake): {recall_1:.4f}")
+    print(f"f1_score (fake): {f1_1:.4f}")
+    print(f"f1_score(overall) : {f1:.4f}")
     # print(predictions)
 
 
