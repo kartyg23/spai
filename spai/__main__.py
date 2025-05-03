@@ -568,9 +568,11 @@ def infer(
     # Keep existing prediction processing
     pred_scores = [score for score, _ in predictions.values()]
     pred_labels = [1 if score >= 0.5 else 0 for score in pred_scores]
-
+    true_labels, pred_labels = np.array(true_labels), np.array(pred_labels)
     # Calculate metrics against synthetic ground truth
     accuracy = accuracy_score(true_labels, pred_labels)
+    r_acc = accuracy_score(true_labels[true_labels==0], pred_labels[true_labels==0] > 0.5)
+    f_acc = accuracy_score(true_labels[true_labels==1], pred_labels[true_labels==1] > 0.5)
     # For class 0
     precision_0 = precision_score(true_labels, pred_labels, pos_label=0)
     recall_0 = recall_score(true_labels, pred_labels, pos_label=0)
@@ -582,6 +584,8 @@ def infer(
     f1_1 = f1_score(true_labels, pred_labels, pos_label=1)
     f1 = f1_score(true_labels, pred_labels)
     print(f"accuracy : {accuracy:.4f}")
+    print(f"accuracy (real) : {r_acc:.4f}")
+    print(f"accuracy (fake) : {f_acc:.4f}")
     print(f"precision (real): {precision_0:.4f}")
     print(f"recall (real): {recall_0:.4f}")
     print(f"f1_score (real): {f1_0:.4f}")
